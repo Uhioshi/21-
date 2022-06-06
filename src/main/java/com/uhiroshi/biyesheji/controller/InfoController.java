@@ -86,6 +86,11 @@ public class InfoController {
         return  Result.buildResult(Result.Status.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * 获取 当前年级的所有教师信息
+     * @param grade
+     * @return
+     */
     @GetMapping("/getTeaInfoBygrade")
     public Result getTeaInfoBygrade(Integer grade){
         if(grade==null)
