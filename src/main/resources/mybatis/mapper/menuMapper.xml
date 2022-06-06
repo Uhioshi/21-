@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.uhiroshi.biyesheji.mapper.menuMapper" >
+
+    <resultMap id="menuMap" type="com.uhiroshi.biyesheji.pojo.po.menu">
+        <id column="menuID" property="menuID" javaType="java.lang.Integer" jdbcType="INTEGER" ></id>
+        <result column="menuName" property="menuName" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result column="IsParent" property="IsParent" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result column="childrenID" property="childrenID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result column="url" property="url" javaType="java.lang.String" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="basecolumn">
+        menuID,menuName,IsParent,childrenID,url
+    </sql>
+
+    <select id="menulist" resultMap="menuMap">
+        select
+        <include refid="basecolumn"/>
+        from menu
+    </select>
+
+</mapper>

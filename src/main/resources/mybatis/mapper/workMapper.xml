@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.uhiroshi.biyesheji.mapper.workMapper" >
+    <select id="getWork" resultType="com.uhiroshi.biyesheji.pojo.po.homework">
+        select * from homework where teacherID=#{userID};
+    </select>
+
+    <select id="getStuwork" resultType="com.uhiroshi.biyesheji.pojo.dto.StuWorkDetalDTO">
+       select stuhomework.*,homework.end_time
+                    from stuhomework,homework
+                     where stuhomework.homeworkID=homework.homeworkID
+                     and stuhomework.homeworkID=#{homeworkID}
+    </select>
+
+    <select id="getStuworkByID" resultType="com.uhiroshi.biyesheji.pojo.po.stuhomework">
+        select * from stuhomework where stuworkID=#{stuworkID};
+    </select>
+
+    <update id="postInfo" parameterType="com.uhiroshi.biyesheji.pojo.dto.StuWorkDTO">
+        update stuhomework set workscore=#{workscore},suggest=#{suggest} where stuworkID=#{stuworkID};
+    </update>
+
+    <insert id="addNewWork" parameterType="com.uhiroshi.biyesheji.pojo.dto.NewWorkDTO">
+        insert into homework (title,teacherID,teacherName,object,start_time,end_time,grade)
+            values (#{title},#{teacherID},#{teacherName},#{object},#{start_time},#{end_time},#{grade})
+    </insert>
+
+    <select id="getWorkByObject" parameterType="com.uhiroshi.biyesheji.pojo.vo.NOgVO" resultType="com.uhiroshi.biyesheji.pojo.po.homework">
+        select * from homework where object=#{object} and grade=#{grade}
+    </select>
+
+    <select id="getWorkinfo" resultType="com.uhiroshi.biyesheji.pojo.po.homework">
+        select homeworkID,title,object,grade,start_time,end_time from homework
+            where homeworkID=#{workID};
+    </select>
+
+    <insert id="postStuWork" parameterType="com.uhiroshi.biyesheji.pojo.po.stuhomework">
+        insert into stuhomework (studentID,homeworkID,studentName,home_context,home_title,create_time)
+            values (#{studentID},#{homeworkID},#{studentName},#{home_context},#{home_title},#{create_time})
+    </insert>
+
+    <select id="avgList" resultType="com.uhiroshi.biyesheji.pojo.dto.AvgVO">
+        select studentID,avg(workscore) as workscore from stuhomework group by studentID;
+    </select>
+
+    <update id="upstuscore" parameterType="com.uhiroshi.biyesheji.pojo.dto.AvgVO">
+
+            update student
+                set
+                    workscore=#{workscore}
+                    where studentID=#{studentID}
+
+    </update>
+
+    <select id="getBeenModiWork" parameterType="java.lang.Long" resultType="com.uhiroshi.biyesheji.pojo.po.stuhomework">
+        select stuhomework.studentName as studentName,stuhomework.homeworkID as homeworkID from homework,stuhomework
+            where homework.homeworkID=stuhomework.stuworkID and studentID=#{studentID};
+    </select>
+
+    <select id="getStuIDFromSW" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select studentID from stuhomework where stuworkID=#{stuworkID}
+    </select>
+
+
+
+
+
+</mapper>

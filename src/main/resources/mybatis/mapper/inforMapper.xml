@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.uhiroshi.biyesheji.mapper.infoMapper" >
+
+    <select id="getoblist" resultType="java.lang.String">
+        select objectName from object where objectID in(
+                select objectID from gradeObject where grade=#{grade}
+            )
+    </select>
+
+    <select id="login" parameterType="java.lang.Long" resultType="java.lang.String">
+        select userPassword from users where userID=#{userID}
+    </select>
+
+    <select id="getStuInfo" resultType="com.uhiroshi.biyesheji.pojo.po.student" parameterType="java.lang.Long">
+        select * from student where studentID=#{userID}
+    </select>
+
+
+    <!--获取教师信息-->
+    <select id="getTeaInfo" resultType="com.uhiroshi.biyesheji.pojo.po.teacher" parameterType="java.lang.Long">
+        select * from teacher where teacherID=#{userID}
+    </select>
+
+    <select id="getAdminInfo" resultType="com.uhiroshi.biyesheji.pojo.po.admin">
+        select * from admin where adminID=#{userID}
+    </select>
+
+
+    <select id="getStuInfoBygrade" resultType="com.uhiroshi.biyesheji.pojo.po.student">
+            select * from student where grade =#{grade}
+    </select>
+
+
+    <update id="postStuinfo" parameterType="com.uhiroshi.biyesheji.pojo.po.student">
+        update student set studentName=#{studentName},
+                            grade=#{grade},
+                            sclass=#{sclass},
+                            where studentID=#{studentID}
+    </update>
+
+    <insert id="addnewStu" parameterType="com.uhiroshi.biyesheji.pojo.po.student">
+        insert into student (studentID,studentName,grade,sclass,IDCard)
+                    values (#{studentID},#{studentName},#{grade},#{sclass},#{IDCard})
+    </insert>
+
+
+
+    <select id="getTeaInfoBygrade" resultType="com.uhiroshi.biyesheji.pojo.po.teacher">
+        select * from teacher where grade =#{grade}
+    </select>
+
+
+    <update id="updateStuExc" parameterType="java.lang.Long">
+        update student set isexcellent=1 where studentID=#{studentID}
+    </update>
+
+    <update id="addScore" parameterType="java.lang.Long">
+        update student set score=score+1 where studentID=#{studentID}
+
+    </update>
+
+    <update id="minusScore" parameterType="java.lang.Long">
+        update student set score=score-10 where studentID=#{studentID}
+    </update>
+</mapper>

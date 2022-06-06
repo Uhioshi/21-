@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.uhiroshi.biyesheji.mapper.questionMapper" >
+    <select id="queryall" resultType="com.uhiroshi.biyesheji.pojo.vo.contextLists">
+        select questionID,title,context,studentName,tdate,readCount,iscommand
+            from question where grade=#{grade}
+    </select>
+
+
+    <!--得到指定ID的问题详情-->
+    <select id="getinfo" resultType="com.uhiroshi.biyesheji.pojo.po.question">
+        select * from question where questionID=#{ID}
+    </select>
+
+    <!--获取推荐问题-->
+    <select id="getrecommand" resultType="com.uhiroshi.biyesheji.pojo.vo.recommandDTO">
+        select questionID,readCount,title from question
+            where  grade=#{grade}  and object=#{object}
+                and iscommand=1;
+    </select>
+
+    <select id="getpersonalques" resultType="com.uhiroshi.biyesheji.pojo.vo.contextLists" parameterType="java.lang.Long">
+        select questionID,title,context,studentName,tdate,readCount,iscommand from question where studentID=#{studentID};
+    </select>
+
+    <select id="getStuanswer" parameterType="java.lang.Long" resultType="com.uhiroshi.biyesheji.pojo.po.answer">
+        select * from answer where studentID=#{ID};
+    </select>
+
+    <delete id="deleteStuanswer">
+        delete answer where answerID=#{ID};
+    </delete>
+
+
+    <select id="getquesByObject"  resultType="com.uhiroshi.biyesheji.pojo.vo.contextLists">
+        select questionID,title,context,studentName,tdate,readCount,iscommand
+            from question where object=#{object} and grade=#{grade}
+     </select>
+
+    <insert id="Stupostquestion" parameterType="com.uhiroshi.biyesheji.pojo.po.question">
+        insert into question (title,context,studentID,studentName,grade,object,sclass,tdate)
+            values (#{title},#{context},#{studentID},#{studentName},#{grade},#{object},#{sclass},#{tdate})
+    </insert>
+
+    <insert id="StuScorequestion" parameterType="com.uhiroshi.biyesheji.pojo.po.question">
+        insert into question (title,context,studentID,studentName,grade,object,sclass,tdate,iscommand)
+            values (#{title},#{context},#{studentID},#{studentName},#{grade},#{object},#{sclass},#{tdate},1)
+    </insert>
+
+    <select id="getKnowlegdePoint" resultType="com.uhiroshi.biyesheji.pojo.po.konwledgepoint">
+        select * from knowledgepoint where teacherID=#{userID};
+    </select>
+
+    <!--//获取知识点的问题-->
+    <select id="getByPoint" resultType="com.uhiroshi.biyesheji.pojo.vo.contextLists">
+        select questionID,title,context,studentName,tdate,readCount,iscommand from question
+            where questionID
+                in
+                (select questionID from questionbypoint where pointID=#{ID});
+    </select>
+
+<!--    三表联合 knowledgepoint questionbypoint  question  检索出 符合ID的问题-->
+    <select id="QuestionByknowledge"  parameterType="java.lang.Long"  resultType="com.uhiroshi.biyesheji.pojo.vo.QKnowledgeVO">
+        select knowledgepoint.ID,   knowledgepoint.knowledgePoint,
+               question.questionID,     question.title,    question.context
+            from question,knowledgepoint,questionbypoint where
+              question.questionID=questionbypoint.questionID and knowledgepoint.ID = questionbypoint.pointID
+                and questionbypoint.pointID=#{pointID}
+    </select>
+
+
+    <select id="getKnowledgeQues"    resultType="com.uhiroshi.biyesheji.pojo.vo.QKnowledgeVO">
+        select  knowledgepoint.ID,   knowledgepoint.knowledgePoint,
+               question.questionID,     question.title,    question.context
+            from question,knowledgepoint,questionbypoint where
+              question.questionID=questionbypoint.questionID and knowledgepoint.ID = questionbypoint.pointID
+
+    </select>
+
+
+    <insert id="Teapostquestion" parameterType="com.uhiroshi.biyesheji.pojo.po.question">
+        insert into question (title,context,teacherID,teacherName,grade,object,sclass,tdate)
+            values (#{title},#{context},#{studentID},#{studentName},#{grade},#{object},#{sclass},#{tdate})
+    </insert>
+
+    <select id="getByObject"  resultType="com.uhiroshi.biyesheji.pojo.vo.contextLists">
+        select questionID,title,context,studentName,tdate,readCount,iscommand
+            from question where object=#{object} and grade=#{grade}
+    </select>
+
+
+   <!-- 没有得到知识点分类的问题-->
+    <select id="getNonePointQues"  resultType="com.uhiroshi.biyesheji.pojo.vo.contextLists">
+        select questionID,title,context,studentName,tdate,readCount,iscommand
+            from question where object=#{object} and grade=#{grade} and beenPoint=0
+    </select>
+
+  <!--  没有得到分类的问题-->
+    <select id="getNoneTypeQues"  resultType="com.uhiroshi.biyesheji.pojo.vo.contextLists">
+        select questionID,title,context,studentName,tdate,readCount,iscommand
+            from question where object=#{object} and grade=#{grade} and beenType=0
+    </select>
+
+
+    <select id="getTeaID" parameterType="com.uhiroshi.biyesheji.pojo.po.sclass" resultType="java.lang.Long">
+        select teacherID from sclass where grade=#{grade} and sclass=#{sclass} and object=#{object}
+
+    </select>
+
+    <insert id="StucommentQues" parameterType="com.uhiroshi.biyesheji.pojo.vo.StuCommentVO">
+
+        insert into answer (studentID,studentName,answercontext,questionID,tdate)
+            values (#{studentID},#{studentName},#{answercontext},#{questionID},#{tdate})
+    </insert>
+
+    <insert id="TeacommentQues" parameterType="com.uhiroshi.biyesheji.pojo.vo.StuCommentVO">
+        insert into answer (teacherID,teacherName,answercontext,questionID,tdate,iscommand)
+            values (#{studentID},#{studentName},#{answercontext},#{questionID},#{tdate},1)
+    </insert>
+
+
+    <!--查询所有知识点问题-->
+    <select id="getAllPointQues" parameterType="java.lang.Long" resultType="com.uhiroshi.biyesheji.pojo.dto.PointQuesDTO">
+        select question.questionID as questionID,question.title as title,knowledgepoint.knowledgePoint as knowledgePoint,question.studentName as studentName,
+                knowledgepoint.ID as ID
+                from question,knowledgepoint,questionbypoint
+	         where question.questionID=questionbypoint.questionID
+	            and questionbypoint.pointID=knowledgepoint.ID
+	            and knowledgepoint.teacherID=#{teacherID}
+    </select>
+
+    <select id="getQuesByKnowledge"  resultType="com.uhiroshi.biyesheji.pojo.vo.contextLists">
+        select question.questionID,question.title,question.context,question.studentName,
+                question.tdate,question.readCount,question.iscommand
+                from question,knowledgepoint,questionbypoint
+	         where question.questionID=questionbypoint.questionID
+	            and questionbypoint.pointID=knowledgepoint.ID
+	            and knowledgepoint.ID=#{ID}
+    </select>
+
+
+    <!--查询所有知识点问题-->
+    <select id="getAllPointUniq" parameterType="java.lang.Long" resultType="com.uhiroshi.biyesheji.pojo.dto.PointQuesDTO">
+        select question.questionID as questionID,question.title as title,  knowledgepoint.knowledgePoint as knowledgePoint,question.studentName as studentName,
+                knowledgepoint.ID as ID
+                from question,knowledgepoint,questionbypoint
+	         where question.questionID=questionbypoint.questionID
+	            and questionbypoint.pointID=knowledgepoint.ID
+	            and knowledgepoint.teacherID=#{teacherID} group by knowledgePoint
+    </select>
+
+
+    <!--在questionbypoint里面查找 questionID-->
+    <select id="getQID" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select questionID from questionbypoint where pointID=#{pointID};
+    </select>
+
+    <insert id="addPrealteQues" parameterType="java.util.List">
+        insert into questionbypoint (pointID,questionID)
+                values
+         <foreach collection="list"  item="r" separator=",">
+            (
+            #{r.pointID},#{r.questionID}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="delPrealteQues" parameterType="com.uhiroshi.biyesheji.pojo.vo.KnowRealteQuesVO">
+        delete from questionbypoint where pointID=#{pointID} and
+        questionID in
+        <foreach collection="list" item="q" separator="," open="(" close=")">
+        #{q}
+        </foreach>
+    </delete>
+
+
+    <!--添加知识点-->
+    <insert id="addnewknow" parameterType="com.uhiroshi.biyesheji.pojo.po.konwledgepoint">
+        insert into knowledgepoint
+                (knowledgepoint,teacherID)
+            values
+                (#{knowledgePoint},#{teacherID})
+    </insert>
+
+    <select id="getKnowID" resultType="java.lang.Long">
+        select ID from knowledgepoint
+            where teacherID=#{teacherID}  and knowledgepoint=#{knowledgepoint}
+    </select>
+
+    <update id="cancelcommand" >
+        update question set iscommand=#{iscommand}
+            where questionID=#{questionID}
+    </update>
+
+</mapper>

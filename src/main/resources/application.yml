@@ -1,0 +1,30 @@
+server:
+  port: 9000
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath*:mybatis/mapper/*.xml
+
+spring:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/quest?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 12345
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+    content-type: text/html
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/view/,classpath:/public,classpath:/resources,classpath:/META-INF/resources
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    pool:
+      max-active: 8
+      max-wait: -1
+      min-idle: 0
+
+    timeout: 5000
