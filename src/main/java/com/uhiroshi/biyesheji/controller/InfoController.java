@@ -70,6 +70,11 @@ public class InfoController {
         return  Result.buildResult(Result.Status.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * 教务主任功能 添加新的学生
+     * @param stu
+     * @return
+     */
     @PostMapping("/addNewStu")
     public Result addnew(@RequestBody student stu){
         try{
