@@ -7,6 +7,7 @@
         <typeAlias alias="Long" type="java.lang.Long" />
         <typeAlias alias="HashMap" type="java.util.HashMap" />
         <typeAlias  alias="Timestamp" type="java.sql.Timestamp"></typeAlias>
+        <typeAlisa alias="" type="">
     </typeAliases>
 
 </configuration>
